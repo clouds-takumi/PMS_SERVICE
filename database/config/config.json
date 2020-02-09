@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "zxcvzxh.1013",
+    "password": "123456",
     "database": "pms",
     "host": "127.0.0.1",
     "dialect": "mysql",

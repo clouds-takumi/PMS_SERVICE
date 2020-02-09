@@ -21,7 +21,7 @@ module.exports = appInfo => {
     port: 3306,
     database: 'pms',
     username: 'root',
-    password: 'zxcvzxh.1013',
+    password: '123456',
   };
 
   // add your middleware config here
