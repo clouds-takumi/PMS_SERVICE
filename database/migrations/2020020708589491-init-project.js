@@ -8,17 +8,8 @@ module.exports = {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       name: STRING(30),
       status: INTEGER,
-      startDate: DATE,
-      endDate: DATE,
-      created: {
-        type: INTEGER,
-        references: {
-          model: {
-            tableName: 'users',
-            key: 'id',
-          },
-        },
-      },
+      start_date: DATE,
+      created: INTEGER,
       tags: TEXT,
       created_at: DATE,
       updated_at: DATE,

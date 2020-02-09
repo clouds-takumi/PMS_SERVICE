@@ -13,6 +13,7 @@ module.exports = app => {
 
   router.get('/projects', auth, controller.project.getAll);
   router.get('/project/:id', auth, controller.project.getOne);
-  // router.post('/project', auth, controller.project.create);
-  // router.delete('/project', auth, controller.project.destroy);
+  router.post('/project', auth, controller.project.create);
+  router.delete('/project/:id', auth, controller.project.destroy);
+  router.put('/project/:id', auth, controller.project.update);
 };

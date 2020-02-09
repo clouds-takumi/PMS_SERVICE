@@ -1,60 +1,62 @@
 'use strict';
 
 const Service = require('egg').Service;
-const md5 = require('js-md5');
-const jwt = require('jsonwebtoken');
 
 class LoginService extends Service {
-  async login(username, password) {
+  async getAll() {
     const { ctx } = this;
-    const user = await ctx.model.User.findOne({ where: { username } });
-    if (!user) {
-      ctx.body = {
-        msg: '用户名或者密码错误!',
-        code: 3,
-      };
-      return;
-    }
-    if (user) {
-      if (user.password !== md5(password)) {
-        ctx.body = {
-          msg: '用户名或者密码错误!',
-          code: 3,
-        };
-        return;
-      }
+    const { query } = ctx;
 
-      return user;
-    }
-  }
+    const projectsCount = await ctx.model.Project.count();
 
-  async register(username, password) {
-    const { ctx } = this;
-    const user = await ctx.model.User.findOne({ where: { username } });
-    if (user) {
-      ctx.body = {
-        msg: '用户名已被注册!',
-        code: 3,
-      };
-      return;
-    }
-    return await ctx.model.User.create({ username, password: md5(password) });
-  }
-
-  async userInfo() {
-    const { ctx } = this;
-    let token = ctx.request.header.authorization;
-    token = token.replace(/^Bearer\s/, '');
-
-    const decode = jwt.verify(token, ctx.app.config.jwt.secret, {
-      expiresIn: ctx.app.config.jwt.expire,
-    });
-
-    const user = await ctx.model.User.findByPk(decode.uid);
-    return {
-      id: user.id,
-      username: user.username,
+    const searchParams = {
+      where: query,
     };
+    const pageSize = query.pageSize || 10;
+    const page = query.page || 1;
+
+    searchParams.offset = (page - 1) * pageSize;
+    searchParams.limit = pageSize;
+
+    const projects = await ctx.model.Project.findAll(searchParams);
+
+    return {
+      lists: projects,
+      page,
+      pageSize,
+      total: projectsCount,
+    };
+  }
+
+  async getOne(id) {
+    const { ctx } = this;
+
+    return await ctx.model.Project.findByPk(+id);
+  }
+
+  async create(params) {
+    const { ctx } = this;
+
+    return await ctx.model.Project.create(params);
+  }
+
+  async destroy(id) {
+    const { ctx } = this;
+
+    try {
+      ctx.model.Project.destroy({ where: { id } });
+    } catch (err) {
+      ctx.body = {
+        code: 9,
+        msg: '删除失败',
+      };
+    }
+  }
+
+  async update(id, params) {
+    const { ctx } = this;
+
+    return await ctx.model.Project.update(params, { where: { id } });
   }
 }
 
