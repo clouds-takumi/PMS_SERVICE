@@ -2,7 +2,7 @@
 
 const Service = require('egg').Service;
 
-class LoginService extends Service {
+class ProjectService extends Service {
   async getAll() {
     const { ctx } = this;
     const { query } = ctx;
@@ -60,4 +60,4 @@ class LoginService extends Service {
   }
 }
 
-module.exports = LoginService;
+module.exports = ProjectService;

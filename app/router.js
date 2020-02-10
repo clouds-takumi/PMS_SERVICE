@@ -16,4 +16,10 @@ module.exports = app => {
   router.post('/project', auth, controller.project.create);
   router.delete('/project/:id', auth, controller.project.destroy);
   router.put('/project/:id', auth, controller.project.update);
+
+  router.get('/tags', auth, controller.tag.getAll);
+  router.get('/tag/:id', auth, controller.tag.getOne);
+  router.post('/tag', auth, controller.tag.create);
+  router.delete('/tag/:id', auth, controller.tag.destroy);
+  router.put('/tag/:id', auth, controller.tag.update);
 };

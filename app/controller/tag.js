@@ -4,35 +4,31 @@ const Controller = require('egg').Controller;
 
 const createRule = {
   name: 'string',
-  status: 'number',
-  start_date: { type: 'string', required: false },
-  end_date: { type: 'string', required: false },
-  created: 'number',
-  tags: { type: 'string', required: false },
+  color: 'string',
 };
 
-class ProjectController extends Controller {
+class TagController extends Controller {
   async getAll() {
     const { ctx } = this;
 
-    const projects = await ctx.service.project.getAll();
+    const tags = await ctx.service.tag.getAll();
 
     ctx.body = {
       code: 0,
       msg: '',
-      data: projects,
+      data: tags,
     };
   }
 
   async getOne() {
     const { ctx } = this;
 
-    const project = await ctx.service.project.getOne(ctx.params.id);
+    const tag = await ctx.service.tag.getOne(ctx.params.id);
 
     ctx.body = {
       code: 0,
       msg: '',
-      data: project,
+      data: tag,
     };
   }
 
@@ -41,13 +37,13 @@ class ProjectController extends Controller {
 
     ctx.validate(createRule, ctx.request.body);
 
-    const project = await ctx.service.project.create(ctx.request.body);
+    const tag = await ctx.service.tag.create(ctx.request.body);
 
     ctx.body = {
       code: 0,
       msg: '',
       data: {
-        id: project.id,
+        id: tag.id,
       },
     };
   }
@@ -55,7 +51,7 @@ class ProjectController extends Controller {
   async destroy() {
     const { ctx } = this;
 
-    await ctx.service.project.destroy(ctx.params.id);
+    await ctx.service.tag.destroy(ctx.params.id);
 
     ctx.body = {
       code: 0,
@@ -66,16 +62,16 @@ class ProjectController extends Controller {
   async update() {
     const { ctx } = this;
 
-    const project = await ctx.service.project.update(ctx.params.id, ctx.request.body);
+    const tag = await ctx.service.tag.update(ctx.params.id, ctx.request.body);
 
     ctx.body = {
       code: 0,
       msg: '操作成功',
       data: {
-        id: project.id,
+        id: tag.id,
       },
     };
   }
 }
 
-module.exports = ProjectController;
+module.exports = TagController;
