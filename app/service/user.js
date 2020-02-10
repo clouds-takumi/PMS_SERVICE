@@ -4,7 +4,7 @@ const Service = require('egg').Service;
 const md5 = require('js-md5');
 const jwt = require('jsonwebtoken');
 
-class LoginService extends Service {
+class UserService extends Service {
   async login(username, password) {
     const { ctx } = this;
     const user = await ctx.model.User.findOne({ where: { username } });
@@ -58,4 +58,4 @@ class LoginService extends Service {
   }
 }
 
-module.exports = LoginService;
+module.exports = UserService;

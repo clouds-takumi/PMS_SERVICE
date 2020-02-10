@@ -3,7 +3,7 @@
 const Controller = require('egg').Controller;
 const jwt = require('jsonwebtoken');
 
-class LoginController extends Controller {
+class UserController extends Controller {
   async login() {
     const { ctx } = this;
     const { username, password } = ctx.request.body;
@@ -49,4 +49,4 @@ class LoginController extends Controller {
   }
 }
 
-module.exports = LoginController;
+module.exports = UserController;
