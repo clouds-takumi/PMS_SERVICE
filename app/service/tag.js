@@ -3,43 +3,39 @@
 const Service = require('egg').Service;
 
 class TagService extends Service {
-  async getAll() {
+  async getAll(params) {
     const { ctx } = this;
-
-    const tags = await ctx.model.Tag.findAll();
+    const tags = await ctx.model.Tag.findAll(params);
 
     return tags;
   }
 
   async getOne(id) {
     const { ctx } = this;
+    const tag = await ctx.model.Tag.findByPk(id);
 
-    return await ctx.model.Tag.findByPk(+id);
+    return tag;
   }
 
   async create(params) {
     const { ctx } = this;
+    const tag = await ctx.model.Tag.create(params);
 
-    return await ctx.model.Tag.create(params);
+    return tag;
   }
 
   async destroy(id) {
     const { ctx } = this;
+    const tag = await ctx.model.Tag.destroy({ where: { id } });
 
-    try {
-      ctx.model.Tag.destroy({ where: { id } });
-    } catch (err) {
-      ctx.body = {
-        code: 9,
-        msg: '删除失败',
-      };
-    }
+    return tag;
   }
 
   async update(id, params) {
     const { ctx } = this;
+    const tag = await ctx.model.Tag.update(params, { where: { id } });
 
-    return await ctx.model.Tag.update(params, { where: { id } });
+    return tag;
   }
 }
 

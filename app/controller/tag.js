@@ -3,7 +3,11 @@
 const Controller = require('egg').Controller;
 
 const createRule = {
-  name: 'string',
+  name: {
+    type: 'string',
+    max: 10,
+    min: 1,
+  },
   color: 'string',
 };
 
@@ -15,33 +19,28 @@ class TagController extends Controller {
 
     ctx.body = {
       code: 0,
-      msg: '',
       data: tags,
     };
   }
 
   async getOne() {
     const { ctx } = this;
-
     const tag = await ctx.service.tag.getOne(ctx.params.id);
 
     ctx.body = {
       code: 0,
-      msg: '',
       data: tag,
     };
   }
 
   async create() {
     const { ctx } = this;
-
-    ctx.validate(createRule, ctx.request.body);
+    ctx.validate(createRule);
 
     const tag = await ctx.service.tag.create(ctx.request.body);
 
     ctx.body = {
       code: 0,
-      msg: '',
       data: {
         id: tag.id,
       },
@@ -55,7 +54,6 @@ class TagController extends Controller {
 
     ctx.body = {
       code: 0,
-      msg: '操作成功',
     };
   }
 
@@ -66,7 +64,6 @@ class TagController extends Controller {
 
     ctx.body = {
       code: 0,
-      msg: '操作成功',
       data: {
         id: tag.id,
       },

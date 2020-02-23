@@ -8,11 +8,13 @@ const createRule = {
     max: 20,
     min: 1,
   },
+  assignee: 'string?',
+  startDate: 'string',
   desc: 'string?',
-  tags: 'string?',
+  projectId: 'string',
 };
 
-class ProjectController extends Controller {
+class IterationController extends Controller {
   async getAll() {
     const { ctx } = this;
     const { query } = ctx;
@@ -22,6 +24,12 @@ class ProjectController extends Controller {
       searchParams.where.name = {
         [Op.like]: `%${query.name}%`,
       };
+    }
+    if (query.assignee) {
+      searchParams.where.assignee = query.assignee;
+    }
+    if (query.startDate) {
+      searchParams.where.startDate = query.startDate;
     }
     let page = 1;
     let pageSize = 3;
@@ -34,15 +42,15 @@ class ProjectController extends Controller {
     searchParams.offset = (page - 1) * pageSize;
     searchParams.limit = pageSize;
 
-    const projects = await ctx.service.project.getAll(searchParams);
+    const iterations = await ctx.service.iteration.getAll(searchParams);
 
     ctx.body = {
       code: 0,
       data: {
         pageSize,
         page,
-        lists: projects.rows,
-        total: projects.count,
+        lists: iterations.rows,
+        total: iterations.count,
       },
     };
   }
@@ -50,11 +58,11 @@ class ProjectController extends Controller {
   async getOne() {
     const { ctx } = this;
 
-    const project = await ctx.service.project.getOne(ctx.params.id);
+    const iteration = await ctx.service.iteration.getOne(ctx.params.id);
 
     ctx.body = {
       code: 0,
-      data: project,
+      data: iteration,
     };
   }
 
@@ -62,13 +70,12 @@ class ProjectController extends Controller {
     const { ctx } = this;
     ctx.validate(createRule);
     const params = ctx.request.body;
-    params.userId = ctx.uid;
-    const project = await ctx.service.project.create(params);
+    const iteration = await ctx.service.iteration.create(params);
 
     ctx.body = {
       code: 0,
       data: {
-        id: project.id,
+        id: iteration.id,
       },
     };
   }
@@ -76,7 +83,7 @@ class ProjectController extends Controller {
   async destroy() {
     const { ctx } = this;
 
-    await ctx.service.project.destroy(ctx.params.id);
+    await ctx.service.iteration.destroy(ctx.params.id);
 
     ctx.body = {
       code: 0,
@@ -86,7 +93,7 @@ class ProjectController extends Controller {
   async update() {
     const { ctx } = this;
     ctx.validate(createRule);
-    await ctx.service.project.update(ctx.params.id, ctx.request.body);
+    await ctx.service.iteration.update(ctx.params.id, ctx.request.body);
 
     ctx.body = {
       code: 0,
@@ -94,4 +101,4 @@ class ProjectController extends Controller {
   }
 }
 
-module.exports = ProjectController;
+module.exports = IterationController;
