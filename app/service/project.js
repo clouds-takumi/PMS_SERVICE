@@ -3,60 +3,46 @@
 const Service = require('egg').Service;
 
 class ProjectService extends Service {
-  async getAll() {
+  async getAll(params) {
     const { ctx } = this;
-    const { query } = ctx;
+    params.include = [{
+      model: ctx.model.User,
+    }];
+    const projects = await ctx.model.Project.findAndCountAll(params);
 
-    const projectsCount = await ctx.model.Project.count();
-
-    const searchParams = {
-      where: query,
-    };
-    const pageSize = query.pageSize || 10;
-    const page = query.page || 1;
-
-    searchParams.offset = (page - 1) * pageSize;
-    searchParams.limit = pageSize;
-
-    const projects = await ctx.model.Project.findAll(searchParams);
-
-    return {
-      lists: projects,
-      page,
-      pageSize,
-      total: projectsCount,
-    };
+    return projects;
   }
 
   async getOne(id) {
     const { ctx } = this;
+    const project = await ctx.model.Project.findByPk(id, {
+      include: [{
+        model: ctx.model.User,
+      }],
+    });
 
-    return await ctx.model.Project.findByPk(+id);
+    return project;
   }
 
   async create(params) {
     const { ctx } = this;
+    const project = await ctx.model.Project.create(params);
 
-    return await ctx.model.Project.create(params);
+    return project;
   }
 
   async destroy(id) {
     const { ctx } = this;
+    const project = await ctx.model.Project.destroy({ where: { id } });
 
-    try {
-      ctx.model.Project.destroy({ where: { id } });
-    } catch (err) {
-      ctx.body = {
-        code: 9,
-        msg: '删除失败',
-      };
-    }
+    return project;
   }
 
   async update(id, params) {
     const { ctx } = this;
+    const project = await ctx.model.Project.update(params, { where: { id } });
 
-    return await ctx.model.Project.update(params, { where: { id } });
+    return project;
   }
 }
 

@@ -1,18 +1,19 @@
 'use strict';
 
-module.exports = app => {
-  const { STRING, INTEGER, DATE, TEXT } = app.Sequelize;
+const User = require('./user');
 
-  const Project = app.model.define('project', {
-    id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    name: STRING(30),
-    status: INTEGER,
-    start_date: DATE,
-    created: INTEGER,
-    tags: TEXT,
-    created_at: DATE,
-    updated_at: DATE,
+module.exports = app => {
+  const { STRING, UUID, TEXT, UUIDV4 } = app.Sequelize;
+
+  const Project = app.model.define('projects', {
+    id: { type: UUID, primaryKey: true, defaultValue: UUIDV4 },
+    name: STRING(20), // 名称
+    desc: TEXT, // 描述
+    tags: TEXT, // 标签id
   });
+
+  Project.belongsTo(User(app));
+  Project.sync();
 
   return Project;
 };

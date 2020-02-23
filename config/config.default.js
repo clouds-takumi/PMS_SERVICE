@@ -28,7 +28,7 @@ module.exports = appInfo => {
   // add your middleware config here
   config.middleware = [ 'errorHandler' ];
   config.errorHandler = {
-    match: '/api',
+    match: '',
   };
   config.jwt = {
     secret: 'pms',

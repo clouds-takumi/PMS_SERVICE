@@ -1,15 +1,16 @@
 'use strict';
 
 module.exports = app => {
-  const { STRING, INTEGER, DATE } = app.Sequelize;
+  const { STRING, UUID, TEXT, UUIDV4 } = app.Sequelize;
 
-  const User = app.model.define('user', {
-    id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    username: STRING(30),
-    password: STRING(30),
-    created_at: DATE,
-    updated_at: DATE,
+  const User = app.model.define('users', {
+    id: { type: UUID, primaryKey: true, defaultValue: UUIDV4 },
+    username: { type: STRING(10), allowNull: false, unique: true }, // 用户名
+    password: TEXT, // 密码
+    avatar: STRING, // 头像
   });
+
+  User.sync();
 
   return User;
 };

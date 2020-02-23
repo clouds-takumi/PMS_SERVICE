@@ -15,12 +15,10 @@ module.exports = () => {
         ? 'Internal Server Error'
         : err.message;
 
-      // 从 error 对象上读出各个属性，设置到响应中
-      ctx.body = { error };
-      if (status === 422) {
-        ctx.body.detail = err.errors;
-      }
-      ctx.status = status;
+      ctx.body = {
+        code: 1,
+        msg: error,
+      };
     }
   };
 };

@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports = () => {
   return async function auth(ctx, next) {
-    let token = ctx.request.header.authorization;
+    let token = ctx.get('authorization');
 
     if (token === undefined) {
       ctx.body = {
@@ -16,13 +16,14 @@ module.exports = () => {
     token = token.replace(/^Bearer\s/, '');
 
     try {
-      jwt.verify(token, ctx.app.config.jwt.secret, {
+      const decode = jwt.verify(token, ctx.app.config.jwt.secret, {
         expiresIn: ctx.app.config.jwt.expire,
       });
+      ctx.uid = decode.uid;
       await next();
     } catch (err) {
       ctx.body = {
-        msg: '登录信息已过期，请重新登录',
+        msg: err.message,
         code: 1,
       };
     }

@@ -17,6 +17,18 @@ module.exports = app => {
   router.delete('/project/:id', auth, controller.project.destroy);
   router.put('/project/:id', auth, controller.project.update);
 
+  router.get('/iterations', auth, controller.iteration.getAll);
+  router.get('/iteration/:id', auth, controller.iteration.getOne);
+  router.post('/iteration', auth, controller.iteration.create);
+  router.delete('/iteration/:id', auth, controller.iteration.destroy);
+  router.put('/iteration/:id', auth, controller.iteration.update);
+
+  router.get('/issues', auth, controller.issue.getAll);
+  router.get('/issue/:id', auth, controller.issue.getOne);
+  router.post('/issue', auth, controller.issue.create);
+  router.delete('/issue/:id', auth, controller.issue.destroy);
+  router.put('/issue/:id', auth, controller.issue.update);
+
   router.get('/tags', auth, controller.tag.getAll);
   router.get('/tag/:id', auth, controller.tag.getOne);
   router.post('/tag', auth, controller.tag.create);
