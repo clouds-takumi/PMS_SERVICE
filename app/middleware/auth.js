@@ -21,6 +21,7 @@ module.exports = () => {
       });
       await next();
     } catch (err) {
+      console.log(err);
       ctx.body = {
         msg: '登录信息已过期，请重新登录',
         code: 1,
