@@ -36,7 +36,7 @@ class IssueController extends Controller {
       searchParams.where.priority = query.priority;
     }
     let page = 1;
-    let pageSize = 3;
+    let pageSize = 20;
     if (query.page) {
       page = +query.page;
     }
