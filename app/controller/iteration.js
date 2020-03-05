@@ -32,7 +32,7 @@ class IterationController extends Controller {
       searchParams.where.startDate = query.startDate;
     }
     let page = 1;
-    let pageSize = 3;
+    let pageSize = 20;
     if (query.page) {
       page = +query.page;
     }
