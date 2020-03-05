@@ -11,7 +11,7 @@ const createRule = {
   desc: 'string?',
   assignee: 'string?',
   priority: 'number',
-  deadline: 'stirng?',
+  deadline: 'string?',
   iterationId: 'string?',
 };
 
