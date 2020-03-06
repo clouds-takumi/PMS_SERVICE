@@ -23,6 +23,13 @@ class UserService extends Service {
 
     return user;
   }
+
+  async getAll(params) {
+    const { ctx } = this;
+    const users = await ctx.model.User.findAll(params);
+
+    return users;
+  }
 }
 
 module.exports = UserService;

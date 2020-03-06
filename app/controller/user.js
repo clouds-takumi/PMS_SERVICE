@@ -79,6 +79,17 @@ class UserController extends Controller {
       },
     };
   }
+
+  async getAll() {
+    const { ctx } = this;
+
+    const users = await ctx.service.user.getAll();
+
+    ctx.body = {
+      code: 0,
+      data: users,
+    };
+  }
 }
 
 module.exports = UserController;

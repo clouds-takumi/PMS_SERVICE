@@ -15,9 +15,9 @@ const createRule = {
   iterationId: 'string?',
 };
 const sortRule = {
-  sourceId: 'string',
-  targetId: 'string?',
-  targetIterationId: 'string?',
+  sourceId: 'string', // 必须，拖动的事项id
+  targetId: 'string?', // 目标事项的id。如果事项是最后一个，则不传。
+  targetIterationId: 'string?', // 目标迭代id。如果是拖到backlog。则不传。
 };
 
 class IssueController extends Controller {
