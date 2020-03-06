@@ -14,6 +14,11 @@ const createRule = {
   deadline: 'string?',
   iterationId: 'string?',
 };
+const sortRule = {
+  sourceId: 'string',
+  targetId: 'string?',
+  targetIterationId: 'string?',
+};
 
 class IssueController extends Controller {
   async getAll() {
@@ -34,6 +39,17 @@ class IssueController extends Controller {
     }
     if (query.priority) {
       searchParams.where.priority = query.priority;
+    }
+    if (query.iterationId) {
+      searchParams.where.iterationId = query.iterationId;
+    }
+    if (query.iterationId === '0') {
+      searchParams.where.iterationId = null;
+    }
+    if (query.sortType === 'sort') {
+      searchParams.order = [
+        [ query.sortType, 'ASC' ],
+      ];
     }
     let page = 1;
     let pageSize = 20;
@@ -98,6 +114,39 @@ class IssueController extends Controller {
     const { ctx } = this;
     ctx.validate(createRule);
     await ctx.service.issue.update(ctx.params.id, ctx.request.body);
+
+    ctx.body = {
+      code: 0,
+    };
+  }
+
+  async sort() {
+    const { ctx, app } = this;
+    ctx.validate(sortRule);
+    const params = ctx.request.body;
+    const { Op } = app.Sequelize;
+    const { sourceId, targetId, targetIterationId = null } = params;
+
+    if (!targetId) {
+      const sort = await ctx.model.Issue.max('sort', { where: { iterationId: targetIterationId } });
+
+      await ctx.service.issue.update(sourceId, { sort: isNaN(sort) ? 1 : sort + 1, iterationId: targetIterationId });
+    } else {
+      const target = await await ctx.service.issue.getOne(targetId);
+      const sortParams = {
+        sort: ctx.model.literal('sort + 1'),
+      };
+      const sortSearchParams = {
+        where: {
+          iterationId: targetIterationId,
+          sort: {
+            [Op.gte]: target.sort,
+          },
+        },
+      };
+      await ctx.model.Issue.update(sortParams, sortSearchParams);
+      await ctx.service.issue.update(sourceId, { sort: target.sort, iterationId: targetIterationId });
+    }
 
     ctx.body = {
       code: 0,

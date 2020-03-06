@@ -26,6 +26,7 @@ module.exports = app => {
   router.get('/issues', auth, controller.issue.getAll);
   router.get('/issue/:id', auth, controller.issue.getOne);
   router.post('/issue', auth, controller.issue.create);
+  router.post('/issue/sort', auth, controller.issue.sort);
   router.delete('/issue/:id', auth, controller.issue.destroy);
   router.put('/issue/:id', auth, controller.issue.update);
 

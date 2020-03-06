@@ -26,6 +26,24 @@ class IssueService extends Service {
 
   async create(params) {
     const { ctx } = this;
+    const searchParams = {
+      where: {
+        iterationId: null,
+      },
+    };
+    if (params.iterationId) {
+      searchParams.where = {
+        iterationId: params.iterationId,
+      };
+    }
+    const sort = await ctx.model.Issue.max('sort', searchParams);
+
+    if (isNaN(sort)) {
+      params.sort = 1;
+    } else {
+      params.sort = sort + 1;
+    }
+
     const issue = await ctx.model.Issue.create(params);
 
     return issue;

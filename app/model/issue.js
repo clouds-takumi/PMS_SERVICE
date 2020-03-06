@@ -12,6 +12,7 @@ module.exports = app => {
     assignee: STRING, // 处理人
     priority: INTEGER, // 优先级
     deadline: STRING, // 截止日期
+    sort: INTEGER, // 排序字段
   });
 
   Issue.belongsTo(Iteration(app));
