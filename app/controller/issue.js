@@ -125,13 +125,14 @@ class IssueController extends Controller {
     const { ctx, app } = this;
     ctx.validate(sortRule);
     const params = ctx.request.body;
+    const projectId = ctx.params.projectId;
     const { Op } = app.Sequelize;
     const { sourceId, targetId, targetIterationId = null } = params;
 
     if (!targetId) {
-      const sort = await ctx.model.Issue.max('sort', { where: { iterationId: targetIterationId } });
+      const sort = await ctx.model.Issue.max('sort', { where: { iterationId: targetIterationId, projectId } });
 
-      await ctx.service.issue.update(sourceId, { sort: isNaN(sort) ? 1 : sort + 1, iterationId: targetIterationId });
+      await ctx.service.issue.update(sourceId, { sort: isNaN(sort) ? 1 : sort + 1, iterationId: targetIterationId, projectId });
     } else {
       const target = await await ctx.service.issue.getOne(targetId);
       const sortParams = {
@@ -140,13 +141,14 @@ class IssueController extends Controller {
       const sortSearchParams = {
         where: {
           iterationId: targetIterationId,
+          projectId,
           sort: {
             [Op.gte]: target.sort,
           },
         },
       };
       await ctx.model.Issue.update(sortParams, sortSearchParams);
-      await ctx.service.issue.update(sourceId, { sort: target.sort, iterationId: targetIterationId });
+      await ctx.service.issue.update(sourceId, { sort: target.sort, iterationId: targetIterationId, projectId });
     }
 
     ctx.body = {
