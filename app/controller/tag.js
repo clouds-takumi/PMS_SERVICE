@@ -15,7 +15,11 @@ class TagController extends Controller {
   async getAll() {
     const { ctx } = this;
 
-    const tags = await ctx.service.tag.getAll();
+    const tags = await ctx.service.tag.getAll({
+      where: {
+        projectId: ctx.params.projectId,
+      },
+    });
 
     ctx.body = {
       code: 0,
@@ -37,7 +41,10 @@ class TagController extends Controller {
     const { ctx } = this;
     ctx.validate(createRule);
 
-    const tag = await ctx.service.tag.create(ctx.request.body);
+    const tag = await ctx.service.tag.create({
+      ...ctx.request.body,
+      projectId: ctx.params.projectId,
+    });
 
     ctx.body = {
       code: 0,

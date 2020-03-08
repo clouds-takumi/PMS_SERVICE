@@ -22,7 +22,6 @@ module.exports = () => {
       ctx.uid = decode.uid;
       await next();
     } catch (err) {
-      console.log(err);
       ctx.body = {
         msg: err.message,
         code: 1,

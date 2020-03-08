@@ -13,9 +13,10 @@ class ProjectService extends Service {
     return projects;
   }
 
-  async getOne(id) {
+  async getOne(params) {
     const { ctx } = this;
-    const project = await ctx.model.Project.findByPk(id, {
+    const project = await ctx.model.Project.findOne({
+      where: params,
       include: [{
         model: ctx.model.User,
       }],

@@ -69,6 +69,11 @@ class UserController extends Controller {
     const { ctx } = this;
     const user = await ctx.service.user.userInfo(ctx.uid);
     const { id, username, avatar } = user;
+    const projects = await ctx.service.project.getAll({
+      where: {
+        userId: id,
+      },
+    });
 
     ctx.body = {
       code: 0,
@@ -76,6 +81,7 @@ class UserController extends Controller {
         id,
         username,
         avatar,
+        projects: projects.rows,
       },
     };
   }

@@ -10,15 +10,15 @@ const createRule = {
   },
   assignee: 'string?',
   startDate: 'string',
+  endDate: 'string',
   desc: 'string?',
-  projectId: 'string',
 };
 
 class IterationController extends Controller {
   async getAll() {
     const { ctx } = this;
-    const { query } = ctx;
-    const searchParams = { where: {} };
+    const { query, params } = ctx;
+    const searchParams = { where: { projectId: params.projectId } };
     const { Op } = this.app.Sequelize;
     if (query.name) {
       searchParams.where.name = {
@@ -70,6 +70,7 @@ class IterationController extends Controller {
     const { ctx } = this;
     ctx.validate(createRule);
     const params = ctx.request.body;
+    params.projectId = ctx.params.projectId;
     const iteration = await ctx.service.iteration.create(params);
 
     ctx.body = {

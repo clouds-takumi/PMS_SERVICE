@@ -9,15 +9,15 @@ const createRule = {
     min: 1,
   },
   desc: 'string?',
-  tags: 'string?',
 };
 
 class ProjectController extends Controller {
   async getAll() {
     const { ctx } = this;
     const { query } = ctx;
-    const searchParams = { where: {} };
+    const searchParams = { where: { userId: ctx.uid } };
     const { Op } = this.app.Sequelize;
+
     if (query.name) {
       searchParams.where.name = {
         [Op.like]: `%${query.name}%`,
@@ -50,7 +50,22 @@ class ProjectController extends Controller {
   async getOne() {
     const { ctx } = this;
 
-    const project = await ctx.service.project.getOne(ctx.params.id);
+    const project = await ctx.service.project.getOne(ctx.query);
+
+    ctx.body = {
+      code: 0,
+      data: project,
+    };
+  }
+
+  async getOneByName() {
+    const { ctx } = this;
+
+    if (ctx.query.name) {
+      ctx.throw({ message: '缺少参数' });
+    }
+
+    const project = await ctx.service.project.getOneByName(ctx.query.name);
 
     ctx.body = {
       code: 0,
