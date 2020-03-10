@@ -15,17 +15,13 @@ module.exports = () => {
     }
     token = token.replace(/^Bearer\s/, '');
 
-    try {
-      const decode = jwt.verify(token, ctx.app.config.jwt.secret, {
-        expiresIn: ctx.app.config.jwt.expire,
-      });
+    const decode = jwt.verify(token, ctx.app.config.jwt.secret, {
+      expiresIn: ctx.app.config.jwt.expire,
+    });
+
+    if (decode) {
       ctx.uid = decode.uid;
-      await next();
-    } catch (err) {
-      ctx.body = {
-        msg: err.message,
-        code: 1,
-      };
     }
+    await next();
   };
 };

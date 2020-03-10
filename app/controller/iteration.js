@@ -71,6 +71,7 @@ class IterationController extends Controller {
     ctx.validate(createRule);
     const params = ctx.request.body;
     params.projectId = ctx.params.projectId;
+    console.log(params)
     const iteration = await ctx.service.iteration.create(params);
 
     ctx.body = {

@@ -3,10 +3,9 @@
 const Project = require('./project');
 
 module.exports = app => {
-  const { STRING, UUID, TEXT, UUIDV4 } = app.Sequelize;
+  const { STRING, TEXT } = app.Sequelize;
 
   const Iteration = app.model.define('iterations', {
-    id: { type: UUID, primaryKey: true, defaultValue: UUIDV4 },
     name: STRING(20), // 名称
     desc: TEXT, // 描述
     assignee: STRING, // 负责人
