@@ -12,7 +12,7 @@ const createRule = {
   assignee: 'string?',
   priority: 'number',
   deadline: 'string?',
-  iterationId: 'string?',
+  iterationId: 'number?',
 };
 const sortRule = {
   sourceId: 'string', // 必须，拖动的事项id
