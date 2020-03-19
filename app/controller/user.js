@@ -68,12 +68,12 @@ class UserController extends Controller {
   async userInfo() {
     const { ctx } = this;
     const user = await ctx.service.user.userInfo(ctx.uid);
-    const { id, username, avatar } = user;
-    const projects = await ctx.service.project.getAll({
-      where: {
-        userId: id,
-      },
-    });
+    const { id, username, avatar, name, desc } = user;
+    // const projects = await ctx.service.project.getAll({
+    //   where: {
+    //     userId: id,
+    //   },
+    // });
 
     ctx.body = {
       code: 0,
@@ -81,8 +81,19 @@ class UserController extends Controller {
         id,
         username,
         avatar,
-        projects: projects.rows,
+        name,
+        desc,
+        // projects: projects.rows,
       },
+    };
+  }
+
+  async update() {
+    const { ctx } = this;
+    await ctx.service.user.update(ctx.uid, ctx.request.body);
+
+    ctx.body = {
+      code: 0,
     };
   }
 

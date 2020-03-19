@@ -30,6 +30,13 @@ class UserService extends Service {
 
     return users;
   }
+
+  async update(id, params) {
+    const { ctx } = this;
+    const user = await ctx.model.User.update(params, { where: { id } });
+
+    return user;
+  }
 }
 
 module.exports = UserService;

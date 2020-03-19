@@ -4,7 +4,7 @@
 const errorMap = {
   'jwt expired': 'token过期，请重新登录',
   'Validation Failed': '参数校验错误，请重试',
-  'Validation error': '用户名已存在',
+  'Validation error': '参数错误，请重试',
   'Internal Server Error': '服务器错误',
 };
 

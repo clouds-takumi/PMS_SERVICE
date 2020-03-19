@@ -7,6 +7,8 @@ module.exports = app => {
     username: { type: STRING(10), allowNull: false, unique: true }, // 用户名
     password: TEXT, // 密码
     avatar: STRING, // 头像
+    name: STRING,
+    desc: TEXT,
   });
 
   User.sync();

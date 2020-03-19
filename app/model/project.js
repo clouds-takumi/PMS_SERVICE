@@ -11,7 +11,7 @@ module.exports = app => {
       unique: true,
     },
     desc: TEXT, // 描述
-    tags: TEXT, // 标签id
+    // tags: TEXT, // 标签id
   });
 
   Project.belongsTo(User(app));
