@@ -8,7 +8,9 @@ const createRule = {
     max: 20,
     min: 1,
   },
+  avatar: 'string?',
   desc: 'string?',
+  participant: 'string?',
 };
 
 class ProjectController extends Controller {

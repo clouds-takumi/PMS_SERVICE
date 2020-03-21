@@ -8,7 +8,7 @@ module.exports = app => {
   const Issue = app.model.define('issue', {
     name: STRING(20), // 名称
     desc: TEXT, // 描述
-    assignee: STRING, // 处理人
+    assignee: INTEGER, // 处理人
     priority: INTEGER, // 优先级
     deadline: STRING, // 截止日期
     sort: INTEGER, // 排序字段

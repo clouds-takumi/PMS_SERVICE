@@ -25,7 +25,7 @@ module.exports = () => {
 
       ctx.body = {
         code: error === 'jwt expired' ? 2 : 1,
-        msg: errorMap[error],
+        msg: errorMap[error] || '服务器错误',
       };
     }
   };

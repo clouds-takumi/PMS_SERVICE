@@ -9,8 +9,23 @@ class IssueService extends Service {
       model: ctx.model.Iteration,
     }];
     const issues = await ctx.model.Issue.findAndCountAll(params);
+    const { count, rows } = issues;
 
-    return issues;
+    for (const row of rows) {
+      if (row.assignee) {
+        const user = await ctx.model.User.findByPk(row.assignee);
+
+        row.assignee = {
+          id: user.id,
+          name: user.name,
+        };
+      }
+    }
+
+    return {
+      count,
+      rows,
+    };
   }
 
   async getOne(id) {

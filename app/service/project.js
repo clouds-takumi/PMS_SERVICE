@@ -15,12 +15,28 @@ class ProjectService extends Service {
 
   async getOne(params) {
     const { ctx } = this;
+    const { Op } = this.app.Sequelize;
     const project = await ctx.model.Project.findOne({
       where: params,
       include: [{
         model: ctx.model.User,
       }],
     });
+    const { participant } = project;
+    let participantResult = [];
+    if (participant) {
+      participantResult = await ctx.model.User.findAll({
+        where: {
+          id: {
+            [Op.in]: participant.split(',').map(p => +p),
+          },
+        },
+      });
+    }
+    project.participant = participantResult.map(p => ({
+      id: p.id,
+      name: p.name,
+    }));
 
     return project;
   }
