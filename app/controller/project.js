@@ -17,8 +17,17 @@ class ProjectController extends Controller {
   async getAll() {
     const { ctx } = this;
     const { query } = ctx;
-    const searchParams = { where: { userId: ctx.uid } };
     const { Op } = this.app.Sequelize;
+    const searchParams = {
+      where: {
+        [Op.or]: {
+          userId: ctx.uid,
+          participant: {
+            [Op.like]: `%${ctx.uid}%`,
+          },
+        },
+      },
+    };
 
     if (query.name) {
       searchParams.where.name = {
@@ -33,6 +42,7 @@ class ProjectController extends Controller {
     if (query.pageSize) {
       pageSize = +query.pageSize;
     }
+
     searchParams.offset = (page - 1) * pageSize;
     searchParams.limit = pageSize;
 

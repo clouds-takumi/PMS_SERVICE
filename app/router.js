@@ -39,5 +39,7 @@ module.exports = app => {
   router.delete('/p/:projectId/tag/:id', auth, controller.tag.destroy);
   router.put('/p/:projectId/tag/:id', auth, controller.tag.update);
 
+  router.get('/p/:projectId/activity', auth, controller.activity.getAll);
+
   // router.get('/p/:projectId/users', auth, controller.user.getAll);
 };

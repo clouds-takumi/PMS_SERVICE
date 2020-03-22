@@ -60,13 +60,28 @@ class IssueService extends Service {
     }
 
     const issue = await ctx.model.Issue.create(params);
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'CREATE',
+      issue.id,
+      issue.name,
+      'issue'
+    );
 
     return issue;
   }
 
   async destroy(id) {
     const { ctx } = this;
+    const a = await ctx.model.Issue.findByPk(id);
     const issue = await ctx.model.Issue.destroy({ where: { id } });
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'DELETE',
+      a.id,
+      a.name,
+      'issue'
+    );
 
     return issue;
   }
@@ -74,6 +89,14 @@ class IssueService extends Service {
   async update(id, params) {
     const { ctx } = this;
     const issue = await ctx.model.Issue.update(params, { where: { id } });
+    const a = await ctx.model.Issue.findByPk(id);
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'UPDATE',
+      a.id,
+      a.name,
+      'issue'
+    );
 
     return issue;
   }

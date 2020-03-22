@@ -27,13 +27,28 @@ class IterationService extends Service {
   async create(params) {
     const { ctx } = this;
     const iteration = await ctx.model.Iteration.create(params);
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'CREATE',
+      iteration.id,
+      iteration.name,
+      'iteration'
+    );
 
     return iteration;
   }
 
   async destroy(id) {
     const { ctx } = this;
+    const a = await ctx.model.Iteration.findByPk(id);
     const iteration = await ctx.model.Iteration.destroy({ where: { id } });
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'DELETE',
+      a.id,
+      a.name,
+      'iteration'
+    );
 
     return iteration;
   }
@@ -41,6 +56,14 @@ class IterationService extends Service {
   async update(id, params) {
     const { ctx } = this;
     const iteration = await ctx.model.Iteration.update(params, { where: { id } });
+    const a = await ctx.model.Iteration.findByPk(id);
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'UPDATE',
+      a.id,
+      a.name,
+      'iteration'
+    );
 
     return iteration;
   }

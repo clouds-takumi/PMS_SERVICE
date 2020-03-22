@@ -44,13 +44,28 @@ class ProjectService extends Service {
   async create(params) {
     const { ctx } = this;
     const project = await ctx.model.Project.create(params);
+    await this.service.activity.create(
+      project.id,
+      'CREATE',
+      project.id,
+      project.name,
+      'project'
+    );
 
     return project;
   }
 
   async destroy(id) {
     const { ctx } = this;
+    const p = await ctx.model.Project.findByPk(id);
     const project = await ctx.model.Project.destroy({ where: { id } });
+    await this.service.activity.create(
+      id,
+      'DELETE',
+      p.id,
+      p.name,
+      'project'
+    );
 
     return project;
   }
@@ -58,6 +73,14 @@ class ProjectService extends Service {
   async update(id, params) {
     const { ctx } = this;
     const project = await ctx.model.Project.update(params, { where: { id } });
+    const p = await ctx.model.Project.findByPk(id);
+    await this.service.activity.create(
+      id,
+      'UPDATE',
+      p.id,
+      p.name,
+      'project'
+    );
 
     return project;
   }
