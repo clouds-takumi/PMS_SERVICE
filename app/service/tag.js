@@ -23,20 +23,43 @@ class TagService extends Service {
   async create(params) {
     const { ctx } = this;
     const tag = await ctx.model.Tag.create(params);
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'CREATE',
+      tag.id,
+      tag.name,
+      'tag'
+    );
 
     return tag;
   }
 
   async destroy(id) {
     const { ctx } = this;
+    const a = await ctx.model.Tag.findByPk(id);
     const tag = await ctx.model.Tag.destroy({ where: { id } });
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'DELETE',
+      a.id,
+      a.name,
+      'tag'
+    );
 
     return tag;
   }
 
   async update(id, params) {
     const { ctx } = this;
+    const a = await ctx.model.Tag.findByPk(id);
     const tag = await ctx.model.Tag.update(params, { where: { id } });
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'UPDATE',
+      a.id,
+      a.name,
+      'tag'
+    );
 
     return tag;
   }

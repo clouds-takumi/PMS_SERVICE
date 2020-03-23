@@ -10,8 +10,9 @@ module.exports = app => {
       type: STRING(20),
       unique: true,
     },
-    desc: TEXT, // 描述
-    // tags: TEXT, // 标签id
+    desc: TEXT,
+    avatar: STRING,
+    participant: STRING,
   });
 
   Project.belongsTo(User(app));

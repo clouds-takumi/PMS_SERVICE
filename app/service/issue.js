@@ -9,8 +9,23 @@ class IssueService extends Service {
       model: ctx.model.Iteration,
     }];
     const issues = await ctx.model.Issue.findAndCountAll(params);
+    const { count, rows } = issues;
 
-    return issues;
+    for (const row of rows) {
+      if (row.assignee) {
+        const user = await ctx.model.User.findByPk(row.assignee);
+
+        row.assignee = {
+          id: user.id,
+          name: user.name,
+        };
+      }
+    }
+
+    return {
+      count,
+      rows,
+    };
   }
 
   async getOne(id) {
@@ -45,13 +60,28 @@ class IssueService extends Service {
     }
 
     const issue = await ctx.model.Issue.create(params);
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'CREATE',
+      issue.id,
+      issue.name,
+      'issue'
+    );
 
     return issue;
   }
 
   async destroy(id) {
     const { ctx } = this;
+    const a = await ctx.model.Issue.findByPk(id);
     const issue = await ctx.model.Issue.destroy({ where: { id } });
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'DELETE',
+      a.id,
+      a.name,
+      'issue'
+    );
 
     return issue;
   }
@@ -59,6 +89,14 @@ class IssueService extends Service {
   async update(id, params) {
     const { ctx } = this;
     const issue = await ctx.model.Issue.update(params, { where: { id } });
+    const a = await ctx.model.Issue.findByPk(id);
+    await this.service.activity.create(
+      ctx.params.projectId,
+      'UPDATE',
+      a.id,
+      a.name,
+      'issue'
+    );
 
     return issue;
   }

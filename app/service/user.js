@@ -12,7 +12,7 @@ class UserService extends Service {
 
   async register(username, password, avatar) {
     const { ctx } = this;
-    const user = await ctx.model.User.create({ username, password: md5(password), avatar });
+    const user = await ctx.model.User.create({ username, password: md5(password), avatar, name: username });
 
     return user;
   }

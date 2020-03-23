@@ -104,7 +104,7 @@ class UserController extends Controller {
 
     ctx.body = {
       code: 0,
-      data: users,
+      data: users.filter(user => user.id !== ctx.uid),
     };
   }
 }

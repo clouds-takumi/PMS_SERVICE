@@ -9,7 +9,7 @@ const createRule = {
     min: 1,
   },
   desc: 'string?',
-  assignee: 'string?',
+  assignee: 'number?',
   priority: 'number',
   deadline: 'string?',
   iterationId: 'number?',

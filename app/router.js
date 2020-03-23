@@ -12,6 +12,7 @@ module.exports = app => {
   router.post('/login', controller.user.login);
   router.get('/userInfo', auth, controller.user.userInfo);
   router.put('/userInfo', auth, controller.user.update);
+  router.get('/users', auth, controller.user.getAll);
 
   router.get('/projects', auth, controller.project.getAll);
   router.get('/project', auth, controller.project.getOne);
@@ -38,5 +39,7 @@ module.exports = app => {
   router.delete('/p/:projectId/tag/:id', auth, controller.tag.destroy);
   router.put('/p/:projectId/tag/:id', auth, controller.tag.update);
 
-  router.get('/p/:projectId/users', auth, controller.user.getAll);
+  router.get('/p/:projectId/activity', auth, controller.activity.getAll);
+
+  // router.get('/p/:projectId/users', auth, controller.user.getAll);
 };
