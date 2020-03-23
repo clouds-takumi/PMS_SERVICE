@@ -5,6 +5,9 @@ const Service = require('egg').Service;
 class TagService extends Service {
   async getAll(params) {
     const { ctx } = this;
+    params.include = [{
+      model: ctx.model.Project,
+    }];
     const tags = await ctx.model.Tag.findAll(params);
 
     return tags;
