@@ -3,7 +3,7 @@
 const Project = require('./project');
 
 module.exports = app => {
-  const { STRING, TEXT } = app.Sequelize;
+  const { STRING, TEXT, INTEGER } = app.Sequelize;
 
   const Iteration = app.model.define('iterations', {
     name: STRING(20), // 名称
@@ -11,6 +11,7 @@ module.exports = app => {
     assignee: STRING, // 负责人
     startDate: STRING, // 开始日期
     endDate: STRING, // 结束日期
+    status: INTEGER,
   });
 
   Iteration.belongsTo(Project(app));

@@ -20,6 +20,15 @@ class IssueService extends Service {
           name: user.name,
         };
       }
+
+      if (row.tags) {
+        const tags = await Promise.all(row.tags.split(',').map(id => {
+          return ctx.model.Tag.findByPk(+id);
+        }));
+        row.tags = tags;
+      } else {
+        row.tags = [];
+      }
     }
 
     return {

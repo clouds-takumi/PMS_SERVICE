@@ -12,6 +12,7 @@ const createRule = {
   startDate: 'string',
   endDate: 'string',
   desc: 'string?',
+  status: 'number?',
 };
 
 class IterationController extends Controller {
@@ -71,6 +72,9 @@ class IterationController extends Controller {
     ctx.validate(createRule);
     const params = ctx.request.body;
     params.projectId = ctx.params.projectId;
+    if (!params.status) {
+      params.status = 1;
+    }
     const iteration = await ctx.service.iteration.create(params);
 
     ctx.body = {
