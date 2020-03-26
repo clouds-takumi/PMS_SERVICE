@@ -13,6 +13,7 @@ const createRule = {
   priority: 'number',
   deadline: 'string?',
   iterationId: 'number?',
+  status: 'number?',
 };
 const sortRule = {
   sourceId: 'string', // 必须，拖动的事项id
@@ -91,6 +92,9 @@ class IssueController extends Controller {
     ctx.validate(createRule);
     const params = ctx.request.body;
     params.projectId = ctx.params.projectId;
+    if (!params.status) {
+      params.status = 1;
+    }
     const issue = await ctx.service.issue.create(params);
 
     ctx.body = {

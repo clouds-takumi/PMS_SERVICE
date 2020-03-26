@@ -41,7 +41,17 @@ class IterationService extends Service {
   async destroy(id) {
     const { ctx } = this;
     const a = await ctx.model.Iteration.findByPk(id);
+    const issues = await ctx.model.Issue.findAll({ where: { iterationId: id } });
+    let sort = await ctx.model.Issue.max('sort', {
+      where: { iterationId: null },
+    });
+    if (isNaN(sort)) {
+      sort = 0;
+    }
     const iteration = await ctx.model.Iteration.destroy({ where: { id } });
+    for (let i = 0, len = issues.length; i < len; i++) {
+      await ctx.model.Issue.update({ iterationId: null, sort: sort + i + 1 }, { where: { id: issues[i].id } });
+    }
     await this.service.activity.create(
       ctx.params.projectId,
       'DELETE',
