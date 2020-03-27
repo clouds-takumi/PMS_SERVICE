@@ -1,4 +1,5 @@
 'use strict';
+const Project = require('./project');
 
 module.exports = app => {
   const { STRING, INTEGER } = app.Sequelize;
@@ -9,6 +10,7 @@ module.exports = app => {
     projectId: INTEGER,
   });
 
+  Tag.belongsTo(Project(app));
   Tag.sync();
 
   return Tag;

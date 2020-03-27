@@ -8,7 +8,7 @@ class TagService extends Service {
     params.include = [{
       model: ctx.model.Project,
     }];
-    const tags = await ctx.model.Tag.findAll(params);
+    const tags = await ctx.model.Tag.findAndCountAll(params);
 
     return tags;
   }

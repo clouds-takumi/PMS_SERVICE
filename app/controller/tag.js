@@ -13,13 +13,28 @@ const createRule = {
 
 class TagController extends Controller {
   async getAll() {
-    const { ctx } = this;
+    // const { ctx } = this;
 
-    const tags = await ctx.service.tag.getAll({
-      where: {
-        projectId: ctx.params.projectId,
-      },
-    });
+    // const tags = await ctx.service.tag.getAll({
+    //   where: {
+    //     projectId: ctx.params.projectId,
+    //   },
+    // });
+    const { ctx } = this;
+    const { query, params } = ctx;
+    const searchParams = { where: { projectId: params.projectId } };
+    let page = 1;
+    let pageSize = 20;
+    if (query.page) {
+      page = +query.page;
+    }
+    if (query.pageSize) {
+      pageSize = +query.pageSize;
+    }
+    searchParams.offset = (page - 1) * pageSize;
+    searchParams.limit = pageSize;
+
+    const tags = await ctx.service.tag.getAll(searchParams);
 
     ctx.body = {
       code: 0,
